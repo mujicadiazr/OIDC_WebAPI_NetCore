@@ -7,4 +7,4 @@ ImageGallery/src/ImageGallery.Client/bin/*
 ImageGallery/src/ImageGallery.Client/obj/*
 ImageGallery/src/ImageGallery.Model/bin/*
 ImageGallery/src/ImageGallery.Model/obj/*
-*.csproj.user
+**/*.csproj.user
