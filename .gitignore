@@ -1,0 +1,9 @@
+ImageGallery/.vs/*
+ImageGallery/src/Company.IDP/bin/*
+ImageGallery/src/Company.IDP/obj/*
+ImageGallery/src/ImageGallery.API/bin/*
+ImageGallery/src/ImageGallery.API/obj/*
+ImageGallery/src/ImageGallery.Client/bin/*
+ImageGallery/src/ImageGallery.Client/obj/*
+ImageGallery/src/ImageGallery.Model/bin/*
+ImageGallery/src/ImageGallery.Model/obj/*
