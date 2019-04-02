@@ -24,7 +24,9 @@ namespace Company.IDP
                     Claims = new List<Claim>
                     {
                         new Claim("given_name", "Frank"),
-                        new Claim("family_name", "Underwood")
+                        new Claim("family_name", "Underwood"),
+                        new Claim("address", "83 John St"),
+                        new Claim("role", "FreeUser")
                     }
                 },
 
@@ -37,7 +39,9 @@ namespace Company.IDP
                     Claims = new List<Claim>
                     {
                         new Claim("given_name", "Claire"),
-                        new Claim("family_name", "Smith")
+                        new Claim("family_name", "Smith"),
+                        new Claim("address", "22 Lincoln Rd"),
+                        new Claim("role", "PayingUser")
                     }
                 }
             };
@@ -49,7 +53,12 @@ namespace Company.IDP
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new IdentityResource(
+                    "roles", 
+                    "Your role(s)", 
+                    new List<string>{ "role" })
             };
         }
 
@@ -73,7 +82,9 @@ namespace Company.IDP
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
+                        "roles"
                     },
                     ClientSecrets =
                     {

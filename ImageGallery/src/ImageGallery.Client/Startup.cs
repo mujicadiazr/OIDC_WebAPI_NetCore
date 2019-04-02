@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using IdentityModel;
 
 namespace ImageGallery.Client
 {
@@ -15,6 +19,7 @@ namespace ImageGallery.Client
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
  
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,7 +38,9 @@ namespace ImageGallery.Client
             services.AddAuthentication(options => {
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
-            }).AddCookie("Cookies")
+            }).AddCookie("Cookies", (options) => {
+                options.AccessDeniedPath = "/Authorization/AccessDenied";
+            })
               .AddOpenIdConnect("oidc", options => {
                   options.SignInScheme = "Cookies";
                   options.Authority = "https://localhost:44336/";
@@ -42,9 +49,21 @@ namespace ImageGallery.Client
                   //options.CallbackPath = new PathString("...");
                   options.Scope.Add("openid");
                   options.Scope.Add("profile");
+                  options.Scope.Add("address");
+                  options.Scope.Add("roles");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";
                   options.GetClaimsFromUserInfoEndpoint = true;
+                  options.ClaimActions.Remove("amr");
+                  options.ClaimActions.DeleteClaim("sid");
+                  options.ClaimActions.DeleteClaim("idp");
+                  //options.ClaimActions.DeleteClaim("address");
+                  options.ClaimActions.MapUniqueJsonKey("role", "role");
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      NameClaimType = JwtClaimTypes.GivenName,
+                      RoleClaimType = JwtClaimTypes.Role
+                  };
               });
         }
 

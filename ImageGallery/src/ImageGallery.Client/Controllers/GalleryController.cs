@@ -1,4 +1,5 @@
-﻿using ImageGallery.Client.Services;
+﻿using IdentityModel.Client;
+using ImageGallery.Client.Services;
 using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Authentication;
@@ -121,6 +122,31 @@ namespace ImageGallery.Client.Controllers
         public IActionResult AddImage()
         {
             return View();
+        }
+
+        [Authorize(Roles = "PayingUser")]
+        public async Task<IActionResult> OrderFrame()
+        {
+            var client = new HttpClient();
+
+            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:44336");
+
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+            var response = await client.GetUserInfoAsync(new UserInfoRequest
+            {
+                Address = disco.UserInfoEndpoint,
+                Token = accessToken
+            });
+            
+            if (response.IsError)
+            {
+                throw new Exception("Problem accessing the UserInfo endpoint.", response.Exception);
+            }
+
+            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
+
+            return View(new OrderFrameViewModel(address));
         }
 
         [HttpPost]
