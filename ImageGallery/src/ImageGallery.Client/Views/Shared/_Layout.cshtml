@@ -31,7 +31,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Gallery" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Gallery" asp-action="AddImage">Add an image</a></li>
+                    @if (User.IsInRole("PayingUser"))
+                    {
+                        <li><a asp-area="" asp-controller="Gallery" asp-action="AddImage">Add an image</a></li>
+                    }
                     @if (User.IsInRole("PayingUser"))
                     {
                         <li><a asp-area="" asp-controller="Gallery" asp-action="OrderFrame">Order a framed picture</a></li>
@@ -40,7 +43,7 @@
                     {
                         <li><a asp-area="" asp-controller="Gallery" asp-action="Logout">Logout</a></li>
                     }
-                </ul>
+                    </ul>
             </div>
         </div>
     </div>
