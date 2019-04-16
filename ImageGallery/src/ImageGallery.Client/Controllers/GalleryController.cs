@@ -43,7 +43,11 @@ namespace ImageGallery.Client.Controllers
                     JsonConvert.DeserializeObject<IList<Image>>(imagesAsString).ToList());
 
                 return View(galleryIndexViewModel);
-            }          
+            } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+                      response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
