@@ -129,7 +129,8 @@ namespace ImageGallery.Client.Controllers
             return View();
         }
 
-        [Authorize(Roles = "PayingUser")]
+        //[Authorize(Roles = "PayingUser")]
+        [Authorize(Policy = "CanOrderFrame")]
         public async Task<IActionResult> OrderFrame()
         {
             var client = new HttpClient();
